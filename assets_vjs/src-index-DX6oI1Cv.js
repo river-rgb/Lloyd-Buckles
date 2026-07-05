@@ -55,7 +55,39 @@ function buildApp(shadow){
         h('form',{class:'form'},[input('name','Your name'),input('email','Email address','email'),h('button',{type:'submit',text:'Sign Up'})]),
         h('div',{class:'notice',style:'display:none',text:'Thanks. Your signup was saved on this browser.'})
       ]),
-      h('footer',{class:'footer',text:'Information guide for adults 18+. Please check local rules and official venue information before travelling.'})
+      h('footer',{
+  class:'bg-black bottom-0 w-100 pa3',
+  role:'contentinfo'
+},[
+  h('div',{class:'center mw8 white-70 f6 lh-copy'},[
+    h('p',{class:'ma0 mb2'},[
+      document.createTextNode('This site is operated by '),
+      h('strong',{text:'LEMON MARKETING S.L.'})
+    ]),
+
+    h('p',{class:'ma0 mb2'},[
+      'LEMON MARKETING S.L.',
+      h('br'),
+      'MARTA IBAÑES SAN JUAN',
+      h('br'),
+      'CALLE SANTA CLARA 12',
+      h('br'),
+      '40200 CUÉLLAR',
+      h('br'),
+      'Spain'
+    ]),
+
+    h('p',{class:'ma0'},[
+      h('a',{
+        href:'https://lemonmarketing.dk/',
+        class:'white-70 hover-white',
+        target:'_blank',
+        rel:'noopener noreferrer',
+        text:'Privacy Policy'
+      })
+    ])
+  ])
+])
     ])
   ]);
   const form=app.querySelector('form');
